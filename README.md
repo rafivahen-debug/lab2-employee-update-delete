@@ -6,7 +6,7 @@ Aplikasi Flask sederhana untuk menambah, membaca, memperbarui, dan menghapus dat
 1. Buka folder `Lab2` di VS Code.
 2. Buat/aktifkan virtual environment jika diperlukan, lalu instal Flask: `python -m pip install flask`.
 3. Jalankan: `python app.py`.
-4. Buka `http://127.0.0.1:5000/employees/new` di browser.
+4. Buka `http://127.0.0.1:5001/employees/new` di browser.
 
 ## Fitur
 - Menambah employee melalui form.
