@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pengelolaan Data Employee</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Pengelolaan Data Employee</h1>
+      <p>Tambah, perbarui, dan hapus data employee.</p>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+      <h2>{{ 'Perbarui Data Employee' if edit_employee else 'Tambah Employee Baru' }}</h2>
+      <form action="{{ url_for('employee_bp.edit_employee', id=edit_employee.id) if edit_employee else url_for('employee_bp.show_form') }}" method="POST">
+        <label for="name">Nama</label>
+        <input id="name" type="text" name="name" value="{{ edit_employee.name if edit_employee else '' }}" required>
+        <label for="position">Posisi</label>
+        <input id="position" type="text" name="position" value="{{ edit_employee.position if edit_employee else 'Staff' }}" required>
+        <label for="salary">Gaji (Rp)</label>
+        <input id="salary" type="number" name="salary" min="0" step="1" value="{{ edit_employee.salary if edit_employee else 0 }}" required>
+        <div class="actions">
+          <button class="btn primary" type="submit">{{ 'Simpan Perubahan' if edit_employee else 'Tambah Employee' }}</button>
+          {% if edit_employee %}<a class="btn secondary" href="{{ url_for('employee_bp.show_form') }}">Batal</a>{% endif %}
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Daftar Employee</h2>
+      {% if employees %}
+      <div class="table-wrap"><table>
+        <thead><tr><th>ID</th><th>Nama</th><th>Posisi</th><th>Gaji</th><th>Aksi</th></tr></thead>
+        <tbody>
+        {% for e in employees %}
+          <tr>
+            <td>{{ e.id }}</td><td>{{ e.name }}</td><td>{{ e.position }}</td><td>Rp{{ '{:,.0f}'.format(e.salary).replace(',', '.') }}</td>
+            <td class="actions-cell">
+              <a class="btn edit" href="{{ url_for('employee_bp.edit_employee', id=e.id) }}">Update</a>
+              <form class="delete-form" action="{{ url_for('employee_bp.delete_employee', id=e.id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data employee ini?');">
+                <button class="btn danger" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table></div>
+      {% else %}<p>Belum ada data employee.</p>{% endif %}
+    </section>
+    <footer>Praktikum Lab 2 — Employee Management</footer>
+  </main>
+</body>
+</html>
